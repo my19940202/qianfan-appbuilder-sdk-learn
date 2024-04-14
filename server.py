@@ -4,13 +4,6 @@ import appbuilder
 from appbuilder.core.console.agent_builder import data_class
 import os
 
-# 配置密钥与应用ID,环境变量中添加
-# 初始化Agent
-agent_builder = appbuilder.AgentBuilder(os.environ.get('APPID'))
-
-# 创建会话ID
-conversation_id = agent_builder.create_conversation()
-
 app = Flask(__name__)
 
 # get请求测试
@@ -23,9 +16,14 @@ def get_api():
 
     # 获取请求中的msg
     msg = querys.get('msg')
+    appid = querys.get('appid') or os.environ.get('APPID')
 
     # 执行对话
     try:
+        # 每次会话使用最新的appid
+        agent_builder = appbuilder.AgentBuilder(appid)
+        conversation_id = agent_builder.create_conversation()
+        # 执行对话
         qianfan_res = agent_builder.run(conversation_id, msg)
         # 每次迭代返回AgentBuilderAnswer结构，内可能包括多个事件内容
         # 采集detail数据，用于升入了解message类型的数据
