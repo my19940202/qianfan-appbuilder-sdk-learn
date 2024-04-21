@@ -14,9 +14,9 @@ def post_api():
     query_params = request.args
 
     # 获取并处理 POST 数据
-    if request.form:  # 如果是表单数据
+    if request.form:
         post_data = request.form
-    elif request.json:  # 如果是 JSON 数据
+    elif request.json:
         post_data = request.json
     else:
         post_data = None
