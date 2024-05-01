@@ -27,16 +27,16 @@ def post_api():
     # 执行对话
     try:
         # 每次会话使用最新的appid
-        agent_builder = appbuilder.AgentBuilder(appid)
-        conversation_id = agent_builder.create_conversation()
+        app_builder_client = appbuilder.AppBuilderClient(appid)
+        conversation_id = app_builder_client.create_conversation()
         end_time = time.time()
 
         # 执行对话
-        qianfan_res = agent_builder.run(conversation_id, msg)
+        qianfan_res = app_builder_client.run(conversation_id, msg)
         result = qianfan_res.content.answer
+        result = result.replace("**", "")
         if "^[" in qianfan_res.content.answer:
             result = re.sub(r"\^\[\d+\]\^", "", result)
-            result = result.replace("**", "")
         print(appid, msg, result, end_time - start_time)
         ret = {
             "err_no": 0,
@@ -46,6 +46,7 @@ def post_api():
         print(e)
         ret = {
             "err_no": 1,
+            "err": jsonify(e),
             "data": "小助手繁忙,稍后再试"
         }
 
