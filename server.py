@@ -37,17 +37,15 @@ def post_api():
         result = result.replace("**", "")
         if "^[" in qianfan_res.content.answer:
             result = re.sub(r"\^\[\d+\]\^", "", result)
-        print(appid, msg, result, end_time - start_time)
+        # print(appid, msg, result, end_time - start_time)
         ret = {
             "err_no": 0,
             "data": result
         }
     except Exception as e:
-        print(e)
         ret = {
             "err_no": 1,
-            "err": jsonify(e),
-            "data": "小助手繁忙,稍后再试"
+            "data": "繁忙中,稍后再试"
         }
 
     return ret
